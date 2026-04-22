@@ -1,0 +1,65 @@
+<div class="container" style="max-width:520px;">
+  <div class="page-header">
+    <i class="bi bi-credit-card" style="font-size:1.75rem; color:#4a6fa5;"></i>
+    <h2>Finalizar Pedido</h2>
+  </div>
+
+  <p-card>
+    <!-- Order summary -->
+    <div style="margin-bottom:1rem; padding:0.75rem; background:#f8f9fa; border-radius:8px;">
+      <div style="font-weight:600; margin-bottom:0.5rem;">
+        <i class="bi bi-bag-check"></i> Resumo do Pedido
+      </div>
+      <div *ngFor="let entry of cart.cart().items"
+           style="display:flex; justify-content:space-between; font-size:0.9rem; color:#555; padding:0.2rem 0;">
+        <span>{{ entry.menuItem.name }} × {{ entry.quantity }}</span>
+        <span>R$ {{ entry.menuItem.price * entry.quantity | number:'1.2-2' }}</span>
+      </div>
+      <p-divider [style]="{'margin':'0.5rem 0'}"></p-divider>
+      <div style="display:flex; justify-content:space-between; font-weight:700;">
+        <span>Total</span>
+        <span style="color:#16a34a;">R$ {{ cart.total() | number:'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <!-- Customer name -->
+    <div style="margin-bottom:1rem;">
+      <label style="display:block; font-weight:600; margin-bottom:0.4rem;">
+        <i class="bi bi-person"></i> Seu nome
+      </label>
+      <input
+        pInputText
+        [(ngModel)]="customerName"
+        placeholder="Ex: Maria Silva"
+        style="width:100%;"
+        [disabled]="loading" />
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="error" style="color:#dc2626; font-size:0.9rem; margin-bottom:0.75rem;">
+      <i class="bi bi-exclamation-circle"></i> {{ error }}
+    </div>
+
+    <!-- Loading state -->
+    <div *ngIf="loading" style="text-align:center; padding:1.5rem 0;">
+      <p-progressSpinner strokeWidth="4" [style]="{'width':'48px','height':'48px'}"></p-progressSpinner>
+      <p style="margin-top:0.75rem; color:#666; font-size:0.9rem;">
+        Processando pagamento… Pode levar alguns segundos.<br>
+        <small style="color:#999;">O sistema pode realizar retentativas automáticas.</small>
+      </p>
+    </div>
+
+    <div style="display:flex; gap:0.75rem; justify-content:flex-end; flex-wrap:wrap;">
+      <p-button label="Voltar" icon="pi pi-arrow-left"
+                styleClass="p-button-secondary p-button-outlined"
+                [disabled]="loading"
+                routerLink="/cart">
+      </p-button>
+      <p-button label="Confirmar Pedido" icon="pi pi-check"
+                [loading]="loading"
+                [disabled]="loading || cart.cart().items.length === 0"
+                (onClick)="placeOrder()">
+      </p-button>
+    </div>
+  </p-card>
+</div>

@@ -1,0 +1,111 @@
+@import "primeicons/primeicons.css";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #f0f4f8;
+  color: #1a1a2e;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  h1, h2 {
+    margin: 0;
+    font-weight: 700;
+  }
+}
+
+.fallback-banner {
+  background: #fff8e1;
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  padding: 0.85rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #7b5e00;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+
+  i {
+    font-size: 1.25rem;
+    color: #ffc107;
+  }
+}
+
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.restaurant-icon {
+  font-size: 4rem;
+  text-align: center;
+  padding: 1rem 0 0.5rem;
+  color: #4a6fa5;
+}
+
+.menu-icon {
+  font-size: 3rem;
+  text-align: center;
+  padding: 0.75rem 0 0.25rem;
+  color: #4a6fa5;
+}
+
+.cart-float {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 100;
+}
+
+.retry-log-item {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  color: #7b5e00;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+
+  &.status-created       { background: #e3f2fd; color: #1565c0; }
+  &.status-processing    { background: #fff8e1; color: #f57f17; }
+  &.status-failed        { background: #ffebee; color: #c62828; }
+  &.status-assigning     { background: #e8eaf6; color: #283593; }
+  &.status-pending       { background: #fff3e0; color: #bf360c; }
+  &.status-delivered     { background: #e8f5e9; color: #2e7d32; }
+}

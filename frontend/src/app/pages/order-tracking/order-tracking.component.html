@@ -1,0 +1,110 @@
+<div class="container" style="max-width:680px;">
+  <div class="page-header">
+    <i class="bi bi-geo-alt-fill" style="font-size:1.75rem; color:#4a6fa5;"></i>
+    <h2>Acompanhar Pedido</h2>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" style="text-align:center; padding:3rem 0;">
+    <p-progressSpinner strokeWidth="4" [style]="{'width':'56px','height':'56px'}"></p-progressSpinner>
+    <p style="margin-top:1rem; color:#666;">Carregando status do pedido…</p>
+  </div>
+
+  <ng-container *ngIf="order && !loading">
+
+    <!-- ── FALLBACK BANNER ── -->
+    <div class="fallback-banner" *ngIf="isFallback">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <span>
+        <strong>Logística indisponível</strong> — seu pedido foi registrado e será atribuído a um
+        entregador assim que o serviço for restaurado.
+      </span>
+    </div>
+
+    <!-- ── PAYMENT FAILED BANNER ── -->
+    <div *ngIf="isPaymentFailed"
+         style="background:#fef2f2; border:2px solid #ef4444; border-radius:8px;
+                padding:0.85rem 1.2rem; display:flex; align-items:center; gap:0.6rem;
+                color:#991b1b; font-weight:600; margin-bottom:1.25rem;">
+      <i class="bi bi-x-octagon-fill" style="color:#ef4444; font-size:1.25rem;"></i>
+      <span>Pagamento recusado. Nenhuma cobrança foi realizada.</span>
+    </div>
+
+    <!-- ── ORDER CARD ── -->
+    <p-card [style]="{'margin-bottom':'1.25rem'}">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.5rem;">
+        <div>
+          <p style="margin:0 0 0.25rem; font-size:0.8rem; color:#888;">
+            Pedido #{{ order.id.substring(0, 8).toUpperCase() }}
+          </p>
+          <p style="margin:0 0 0.25rem;"><strong>Cliente:</strong> {{ order.customer }}</p>
+          <p style="margin:0 0 0.25rem;"><strong>Restaurante:</strong> {{ order.restaurant }}</p>
+          <p style="margin:0 0 0.25rem;"><strong>Total:</strong>
+            <span style="color:#16a34a; font-weight:700;"> R$ {{ order.total | number:'1.2-2' }}</span>
+          </p>
+          <p *ngIf="order.driver" style="margin:0; color:#4a6fa5; font-weight:600;">
+            <i class="bi bi-person-fill"></i> Entregador: {{ order.driver }}
+          </p>
+        </div>
+        <span [class]="'status-chip ' + statusClass">
+          {{ statusLabel }}
+        </span>
+      </div>
+    </p-card>
+
+    <!-- ── TIMELINE ── -->
+    <p-card header="Progresso do Pedido" [style]="{'margin-bottom':'1.25rem'}">
+      <p-timeline [value]="timelineEvents" layout="horizontal" align="bottom">
+        <ng-template pTemplate="marker" let-event>
+          <span
+            [style.background]="event.active ? event.color : '#e5e7eb'"
+            style="width:2.2rem; height:2.2rem; border-radius:50%; display:flex;
+                   align-items:center; justify-content:center; transition:background 0.3s;">
+            <i [class]="event.icon" style="color:#fff; font-size:0.9rem;"></i>
+          </span>
+        </ng-template>
+        <ng-template pTemplate="content" let-event>
+          <small [style.color]="event.active ? '#1a1a2e' : '#9ca3af'"
+                 [style.font-weight]="event.active ? '600' : '400'">
+            {{ event.label }}
+          </small>
+        </ng-template>
+      </p-timeline>
+    </p-card>
+
+    <!-- ── RESILIENCE LOG ── (visible when retries happened) -->
+    <p-card *ngIf="order.retry_events.length > 0"
+            [style]="{'margin-bottom':'1.25rem', 'border-left':'4px solid #f59e0b'}">
+      <ng-template pTemplate="header">
+        <div style="padding:0.75rem 1rem 0; display:flex; align-items:center; gap:0.5rem;">
+          <i class="bi bi-arrow-repeat" style="color:#f59e0b; font-size:1.1rem;"></i>
+          <strong>Log de Resiliência — Retentativas</strong>
+        </div>
+      </ng-template>
+      <div *ngFor="let evt of order.retry_events" class="retry-log-item">
+        <i class="bi bi-arrow-repeat"></i>
+        <span>{{ evt }}</span>
+      </div>
+      <p style="margin:0.5rem 0 0; font-size:0.8rem; color:#999;">
+        Cada linha acima gerou um Toast de alerta no momento em que ocorreu.
+      </p>
+    </p-card>
+
+    <!-- ── ITEMS ── -->
+    <p-card header="Itens do Pedido" [style]="{'margin-bottom':'1.5rem'}">
+      <div *ngFor="let item of order.items"
+           style="display:flex; justify-content:space-between; padding:0.35rem 0;
+                  border-bottom:1px solid #f0f0f0; font-size:0.9rem;">
+        <span>{{ item.name }} × {{ item.quantity }}</span>
+        <span style="color:#16a34a; font-weight:600;">
+          R$ {{ item.price * item.quantity | number:'1.2-2' }}
+        </span>
+      </div>
+    </p-card>
+
+    <div style="text-align:center;">
+      <p-button label="Fazer Novo Pedido" icon="pi pi-home" routerLink="/"></p-button>
+    </div>
+
+  </ng-container>
+</div>

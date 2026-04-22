@@ -1,0 +1,48 @@
+<div class="container">
+  <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;">
+    <p-button
+      label="Voltar"
+      icon="pi pi-arrow-left"
+      styleClass="p-button-text"
+      routerLink="/">
+    </p-button>
+    <div class="page-header" style="margin-bottom:0">
+      <span style="font-size:1.75rem">{{ restaurant.emoji }}</span>
+      <h2>{{ restaurant.name }}</h2>
+    </div>
+  </div>
+
+  <div class="grid-cards">
+    <p-card *ngFor="let item of restaurant.items">
+      <ng-template pTemplate="header">
+        <div class="menu-icon">
+          <i [class]="'bi ' + item.icon"></i>
+        </div>
+      </ng-template>
+
+      <h4 style="margin:0 0 0.4rem">{{ item.name }}</h4>
+      <p style="color:#666; font-size:0.875rem; margin:0 0 1rem">{{ item.desc }}</p>
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <strong style="font-size:1.1rem; color:#16a34a;">
+          R$ {{ item.price | number:'1.2-2' }}
+        </strong>
+        <p-button
+          icon="pi pi-plus"
+          styleClass="p-button-rounded p-button-outlined"
+          (onClick)="addItem(item)">
+        </p-button>
+      </div>
+    </p-card>
+  </div>
+
+  <div class="cart-float" *ngIf="cart.itemCount() > 0">
+    <p-button
+      [label]="'Carrinho (' + cart.itemCount() + ')  •  R$ ' + (cart.total() | number:'1.2-2')"
+      icon="pi pi-shopping-cart"
+      styleClass="p-button-success p-button-raised"
+      routerLink="/cart"
+      [style]="{'border-radius':'999px', 'padding':'0.75rem 1.5rem'}">
+    </p-button>
+  </div>
+</div>

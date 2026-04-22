@@ -1,0 +1,67 @@
+version: "3.9"
+
+networks:
+  delivery-net:
+    driver: bridge
+
+volumes:
+  order-db:
+
+services:
+  order-service:
+    build: ./order-service
+    container_name: order-service
+    ports:
+      - "5001:5001"
+    environment:
+      - PAYMENT_SERVICE_URL=http://payment-service:5002
+      - LOGISTICS_SERVICE_URL=http://logistics-service:5003
+      - DATABASE_PATH=/data/orders.db
+    volumes:
+      - order-db:/data
+    networks:
+      - delivery-net
+    depends_on:
+      - payment-service
+      - logistics-service
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  payment-service:
+    build: ./payment-service
+    container_name: payment-service
+    ports:
+      - "5002:5002"
+    networks:
+      - delivery-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  logistics-service:
+    build: ./logistics-service
+    container_name: logistics-service
+    ports:
+      - "5003:5003"
+    networks:
+      - delivery-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5003/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    networks:
+      - delivery-net
+    depends_on:
+      - order-service

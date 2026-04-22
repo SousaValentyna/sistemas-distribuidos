@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="page-header">
+    <span style="font-size:2rem">🛵</span>
+    <h1>Delivery Distribuído</h1>
+  </div>
+  <p style="color:#666; margin-bottom:1.5rem;">
+    Escolha um restaurante para começar seu pedido.
+  </p>
+
+  <div class="grid-cards">
+    <p-card *ngFor="let r of restaurants" styleClass="hover-card" [style]="{'cursor':'pointer'}">
+      <ng-template pTemplate="header">
+        <div class="restaurant-icon">{{ r.emoji }}</div>
+      </ng-template>
+
+      <div style="margin-bottom:0.75rem">
+        <h3 style="margin:0 0 0.25rem">{{ r.name }}</h3>
+        <span style="color:#666; font-size:0.875rem">
+          <i class="bi bi-utensils"></i> {{ r.cuisine }}
+        </span>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-weight:600; color:#f59e0b;">
+          <i class="bi bi-star-fill"></i> {{ r.rating }}
+        </span>
+        <p-button
+          label="Ver Menu"
+          icon="pi pi-arrow-right"
+          iconPos="right"
+          (onClick)="goToMenu(r.id)"
+          [style]="{'border-radius':'20px'}">
+        </p-button>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- Floating cart button -->
+  <div class="cart-float" *ngIf="cart.itemCount() > 0">
+    <p-button
+      [label]="'Ver Carrinho (' + cart.itemCount() + ')'"
+      icon="pi pi-shopping-cart"
+      styleClass="p-button-success p-button-raised"
+      routerLink="/cart"
+      [style]="{'border-radius':'999px', 'padding':'0.75rem 1.5rem'}">
+    </p-button>
+  </div>
+</div>
