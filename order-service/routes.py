@@ -9,6 +9,7 @@ from models import (
     update_driver, append_retry_event, serialize_order,
 )
 from resilience import call_with_retry
+from queue_worker import enqueue_logistics
 
 logger = logging.getLogger("routes")
 
@@ -75,12 +76,14 @@ def create_order_route():
             update_driver(order_id, driver)
         else:
             update_status(order_id, "pending_logistics")
+            enqueue_logistics(order_id, restaurant)
     except (requests.Timeout, requests.ConnectionError):
-        # FALLBACK: logistics is down — queue order instead of crashing
+        # FALLBACK: logistics is down — push to Redis queue for async retry
         logger.warning(
-            "Logística indisponível para pedido %s — fallback: pending_logistics", order_id
+            "[QUEUE] Logística indisponível para pedido %s — enfileirando no Redis", order_id
         )
         update_status(order_id, "pending_logistics")
+        enqueue_logistics(order_id, restaurant)
 
     return jsonify(serialize_order(get_order(order_id))), 200
 

@@ -61,7 +61,7 @@ export class OrderTrackingComponent implements OnInit, OnDestroy {
           if (order.status === 'delivered') {
             this.msg.add({
               severity: 'success',
-              summary:  '🎉 Pedido confirmado!',
+              summary:  'Pedido confirmado!',
               detail:   `Entregador: ${order.driver}`,
               life:     6000,
             });
@@ -77,15 +77,52 @@ export class OrderTrackingComponent implements OnInit, OnDestroy {
   private detectRetries(order: Order): void {
     const newEvents = order.retry_events.slice(this.seenRetryCount);
     newEvents.forEach(evt => {
-      this.msg.add({
-        severity: 'warn',
-        summary:  '🔁 Retentativa Automática',
-        detail:   evt,
-        life:     6000,
-        sticky:   false,
-      });
+      if (evt.includes('[QUEUE-WORKER] ✓')) {
+        this.msg.add({
+          severity: 'success',
+          summary:  'Fila Processada',
+          detail:   evt,
+          life:     8000,
+        });
+      } else if (evt.includes('[QUEUE-WORKER]')) {
+        this.msg.add({
+          severity: 'info',
+          summary:  'Worker de Fila',
+          detail:   evt,
+          life:     6000,
+        });
+      } else if (evt.includes('[QUEUE]')) {
+        this.msg.add({
+          severity: 'info',
+          summary:  'Pedido Enfileirado',
+          detail:   evt,
+          life:     6000,
+        });
+      } else {
+        this.msg.add({
+          severity: 'warn',
+          summary:  'Retentativa Automática',
+          detail:   evt,
+          life:     6000,
+          sticky:   false,
+        });
+      }
     });
     this.seenRetryCount = order.retry_events.length;
+  }
+
+  eventIcon(evt: string): string {
+    if (evt.includes('[QUEUE-WORKER] ✓')) return 'bi bi-check-circle-fill';
+    if (evt.includes('[QUEUE-WORKER]'))   return 'bi bi-cpu-fill';
+    if (evt.includes('[QUEUE]'))          return 'bi bi-collection-fill';
+    return 'bi bi-arrow-repeat';
+  }
+
+  eventColor(evt: string): string {
+    if (evt.includes('[QUEUE-WORKER] ✓')) return '#6b7a56';
+    if (evt.includes('[QUEUE-WORKER]'))   return '#3d4f8a';
+    if (evt.includes('[QUEUE]'))          return '#982128';
+    return '#c98b2a';
   }
 
   get isFallback(): boolean {

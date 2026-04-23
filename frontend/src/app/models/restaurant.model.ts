@@ -61,4 +61,20 @@ export const RESTAURANTS: Restaurant[] = [
       { id: 't5', name: 'Bruschetta al Pomodoro', desc: 'Pão grelhado com tomate, alho e manjericão', price: 18.00, icon: 'bi-egg' },
     ],
   },
+  {
+    id: 'oceano',
+    name: 'Oceano Azul',
+    cuisine: 'Frutos do Mar',
+    rating: 4.7,
+    icon: 'bi-tsunami',
+    emoji: '🦞',
+    items: [
+      { id: 'o1', name: 'Lagosta Grelhada',      desc: 'Lagosta com manteiga de ervas e limão siciliano', price: 120.00, icon: 'bi-brightness-high' },
+      { id: 'o2', name: 'Camarão na Moranga',    desc: 'Camarão cremoso em abóbora com catupiry',         price:  68.00, icon: 'bi-hexagon-fill' },
+      { id: 'o3', name: 'Caldeirada de Peixe',   desc: 'Peixe do dia com legumes, tomate e azeite',       price:  54.00, icon: 'bi-droplet-fill' },
+      { id: 'o4', name: 'Polvo à Lagareiro',     desc: 'Polvo assado com batatas ao murro e azeite',      price:  78.00, icon: 'bi-asterisk' },
+      { id: 'o5', name: 'Ostras Frescas (6 un.)', desc: 'Ostras geladas com limão e molho tabasco',       price:  45.00, icon: 'bi-shield-fill' },
+      { id: 'o6', name: 'Risoto de Camarão',     desc: 'Arroz arbóreo, camarão, parmesão e manjericão',   price:  58.00, icon: 'bi-grid-fill' },
+    ],
+  },
 ];

@@ -1,65 +1,86 @@
-<div class="container" style="max-width:520px;">
-  <div class="page-header">
-    <i class="bi bi-credit-card" style="font-size:1.75rem; color:#4a6fa5;"></i>
-    <h2>Finalizar Pedido</h2>
+<div>
+  <!-- Top Bar -->
+  <div class="app-topbar">
+    <div class="topbar-inner">
+      <button class="topbar-back" routerLink="/cart" [disabled]="loading">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="topbar-title">
+        <i class="bi bi-credit-card"></i>
+        <span>Finalizar Pedido</span>
+      </div>
+      <span style="width:36px;"></span>
+    </div>
   </div>
 
-  <p-card>
-    <!-- Order summary -->
-    <div style="margin-bottom:1rem; padding:0.75rem; background:#f8f9fa; border-radius:8px;">
-      <div style="font-weight:600; margin-bottom:0.5rem;">
-        <i class="bi bi-bag-check"></i> Resumo do Pedido
+  <div class="container">
+
+    <!-- Summary Card -->
+    <div class="summary-card">
+      <div class="sc-label">
+        <i class="bi bi-bag-check" style="margin-right:0.35rem;"></i>Resumo do Pedido
       </div>
-      <div *ngFor="let entry of cart.cart().items"
-           style="display:flex; justify-content:space-between; font-size:0.9rem; color:#555; padding:0.2rem 0;">
-        <span>{{ entry.menuItem.name }} × {{ entry.quantity }}</span>
-        <span>R$ {{ entry.menuItem.price * entry.quantity | number:'1.2-2' }}</span>
-      </div>
-      <p-divider [style]="{'margin':'0.5rem 0'}"></p-divider>
-      <div style="display:flex; justify-content:space-between; font-weight:700;">
-        <span>Total</span>
-        <span style="color:#16a34a;">R$ {{ cart.total() | number:'1.2-2' }}</span>
+      <div class="sc-total">R$ {{ cart.total() | number:'1.2-2' }}</div>
+      <div class="sc-items">
+        <div *ngFor="let entry of cart.cart().items" class="sc-item">
+          <span>{{ entry.menuItem.name }} × {{ entry.quantity }}</span>
+          <span>R$ {{ entry.menuItem.price * entry.quantity | number:'1.2-2' }}</span>
+        </div>
       </div>
     </div>
 
-    <!-- Customer name -->
-    <div style="margin-bottom:1rem;">
-      <label style="display:block; font-weight:600; margin-bottom:0.4rem;">
-        <i class="bi bi-person"></i> Seu nome
-      </label>
-      <input
-        pInputText
-        [(ngModel)]="customerName"
-        placeholder="Ex: Maria Silva"
-        style="width:100%;"
-        [disabled]="loading" />
-    </div>
+    <!-- Form Card -->
+    <div class="content-card">
 
-    <!-- Error -->
-    <div *ngIf="error" style="color:#dc2626; font-size:0.9rem; margin-bottom:0.75rem;">
-      <i class="bi bi-exclamation-circle"></i> {{ error }}
-    </div>
+      <!-- Customer Name -->
+      <div class="input-group">
+        <label><i class="bi bi-person" style="margin-right:0.35rem;"></i>Seu nome</label>
+        <div class="input-wrapper">
+          <i class="bi bi-person input-icon"></i>
+          <input
+            pInputText
+            [(ngModel)]="customerName"
+            placeholder="Ex: Maria Silva"
+            style="width:100%;"
+            [disabled]="loading" />
+        </div>
+      </div>
 
-    <!-- Loading state -->
-    <div *ngIf="loading" style="text-align:center; padding:1.5rem 0;">
-      <p-progressSpinner strokeWidth="4" [style]="{'width':'48px','height':'48px'}"></p-progressSpinner>
-      <p style="margin-top:0.75rem; color:#666; font-size:0.9rem;">
-        Processando pagamento… Pode levar alguns segundos.<br>
-        <small style="color:#999;">O sistema pode realizar retentativas automáticas.</small>
-      </p>
-    </div>
+      <!-- Error Banner -->
+      <div *ngIf="error" class="banner banner-error" style="margin-bottom:1rem;">
+        <i class="bi bi-exclamation-circle-fill"></i>
+        <span>{{ error }}</span>
+      </div>
 
-    <div style="display:flex; gap:0.75rem; justify-content:flex-end; flex-wrap:wrap;">
-      <p-button label="Voltar" icon="pi pi-arrow-left"
-                styleClass="p-button-secondary p-button-outlined"
-                [disabled]="loading"
-                routerLink="/cart">
-      </p-button>
-      <p-button label="Confirmar Pedido" icon="pi pi-check"
-                [loading]="loading"
-                [disabled]="loading || cart.cart().items.length === 0"
-                (onClick)="placeOrder()">
-      </p-button>
+      <!-- Loading State -->
+      <div *ngIf="loading" style="text-align:center; padding:1.5rem 0;">
+        <p-progressSpinner strokeWidth="4" [style]="{'width':'48px','height':'48px'}"></p-progressSpinner>
+        <p style="margin-top:0.875rem; color:var(--text-secondary); font-size:0.875rem;">
+          Processando pagamento…
+        </p>
+        <p style="margin-top:0.25rem; font-size:0.78rem; color:var(--text-muted);">
+          O sistema pode realizar retentativas automáticas.
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div *ngIf="!loading" style="display:flex; flex-direction:column; gap:0.75rem; margin-top:0.5rem;">
+        <p-button
+          label="Confirmar Pedido"
+          icon="pi pi-check"
+          styleClass="btn-full"
+          [disabled]="loading || cart.cart().items.length === 0"
+          (onClick)="placeOrder()">
+        </p-button>
+        <p-button
+          label="Voltar ao Carrinho"
+          icon="pi pi-arrow-left"
+          styleClass="p-button-secondary btn-full"
+          [disabled]="loading"
+          routerLink="/cart">
+        </p-button>
+      </div>
+
     </div>
-  </p-card>
+  </div>
 </div>

@@ -1,48 +1,60 @@
-<div class="container">
-  <div class="page-header">
-    <span style="font-size:2rem">🛵</span>
-    <h1>Delivery Distribuído</h1>
+<div>
+  <!-- Hero -->
+  <div class="hero-section">
+    <!-- Watermelon SVG logo -->
+    <div class="hero-icon">
+      <svg width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-label="Watermelon logo">
+        <!-- Green outer rind -->
+        <circle cx="22" cy="22" r="21" fill="#232f1f"/>
+        <!-- White rind ring -->
+        <circle cx="22" cy="22" r="18" fill="#f5ede8"/>
+        <!-- Red flesh -->
+        <circle cx="22" cy="22" r="15.5" fill="#cf4c54"/>
+        <!-- Seeds -->
+        <ellipse cx="15" cy="18" rx="1.4" ry="2.2" fill="#232f1f" transform="rotate(-20 15 18)"/>
+        <ellipse cx="23" cy="15" rx="1.4" ry="2.2" fill="#232f1f" transform="rotate(5 23 15)"/>
+        <ellipse cx="30" cy="19" rx="1.4" ry="2.2" fill="#232f1f" transform="rotate(20 30 19)"/>
+        <ellipse cx="27" cy="27" rx="1.4" ry="2.2" fill="#232f1f" transform="rotate(-10 27 27)"/>
+        <ellipse cx="17" cy="27" rx="1.4" ry="2.2" fill="#232f1f" transform="rotate(-25 17 27)"/>
+      </svg>
+    </div>
+    <h1 class="hero-title">Watermelon</h1>
+    <p class="hero-subtitle">Escolha um restaurante e faça seu pedido</p>
   </div>
-  <p style="color:#666; margin-bottom:1.5rem;">
-    Escolha um restaurante para começar seu pedido.
-  </p>
 
-  <div class="grid-cards">
-    <p-card *ngFor="let r of restaurants" styleClass="hover-card" [style]="{'cursor':'pointer'}">
-      <ng-template pTemplate="header">
-        <div class="restaurant-icon">{{ r.emoji }}</div>
-      </ng-template>
+  <!-- Restaurant Grid -->
+  <div class="section-header">
+    <h2>Restaurantes</h2>
+    <span style="font-size:0.78rem; color:var(--text-muted);">{{ restaurants.length }} disponíveis</span>
+  </div>
 
-      <div style="margin-bottom:0.75rem">
-        <h3 style="margin:0 0 0.25rem">{{ r.name }}</h3>
-        <span style="color:#666; font-size:0.875rem">
-          <i class="bi bi-utensils"></i> {{ r.cuisine }}
-        </span>
+  <div class="restaurant-grid">
+    <div
+      class="restaurant-card"
+      *ngFor="let r of restaurants"
+      (click)="goToMenu(r.id)">
+      <div class="rc-icon-wrap">
+        <i [class]="'bi ' + r.icon"></i>
       </div>
-
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-weight:600; color:#f59e0b;">
-          <i class="bi bi-star-fill"></i> {{ r.rating }}
-        </span>
-        <p-button
-          label="Ver Menu"
-          icon="pi pi-arrow-right"
-          iconPos="right"
-          (onClick)="goToMenu(r.id)"
-          [style]="{'border-radius':'20px'}">
-        </p-button>
-      </div>
-    </p-card>
+      <span class="rc-name">{{ r.name }}</span>
+      <span class="rc-cuisine">
+        <i class="bi bi-geo-alt"></i> {{ r.cuisine }}
+      </span>
+      <span class="rc-rating">
+        <i class="bi bi-star-fill"></i> {{ r.rating }}
+      </span>
+      <button class="rc-cta">
+        <i class="bi bi-arrow-right-circle" style="margin-right:0.3rem;"></i>Ver Menu
+      </button>
+    </div>
   </div>
 
   <!-- Floating cart button -->
   <div class="cart-float" *ngIf="cart.itemCount() > 0">
     <p-button
-      [label]="'Ver Carrinho (' + cart.itemCount() + ')'"
       icon="pi pi-shopping-cart"
-      styleClass="p-button-success p-button-raised"
-      routerLink="/cart"
-      [style]="{'border-radius':'999px', 'padding':'0.75rem 1.5rem'}">
+      [label]="'Carrinho (' + cart.itemCount() + ')'"
+      routerLink="/cart">
     </p-button>
   </div>
 </div>

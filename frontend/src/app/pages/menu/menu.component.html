@@ -1,48 +1,64 @@
-<div class="container">
-  <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;">
-    <p-button
-      label="Voltar"
-      icon="pi pi-arrow-left"
-      styleClass="p-button-text"
-      routerLink="/">
-    </p-button>
-    <div class="page-header" style="margin-bottom:0">
-      <span style="font-size:1.75rem">{{ restaurant.emoji }}</span>
-      <h2>{{ restaurant.name }}</h2>
+<div>
+  <!-- Top Bar -->
+  <div class="app-topbar">
+    <div class="topbar-inner">
+      <button class="topbar-back" routerLink="/">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="topbar-title">
+        <i [class]="'bi ' + restaurant.icon"></i>
+        <span>{{ restaurant.name }}</span>
+      </div>
+      <span style="width:36px;"></span>
     </div>
   </div>
 
-  <div class="grid-cards">
-    <p-card *ngFor="let item of restaurant.items">
-      <ng-template pTemplate="header">
-        <div class="menu-icon">
-          <i [class]="'bi ' + item.icon"></i>
-        </div>
-      </ng-template>
-
-      <h4 style="margin:0 0 0.4rem">{{ item.name }}</h4>
-      <p style="color:#666; font-size:0.875rem; margin:0 0 1rem">{{ item.desc }}</p>
-
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <strong style="font-size:1.1rem; color:#16a34a;">
-          R$ {{ item.price | number:'1.2-2' }}
-        </strong>
-        <p-button
-          icon="pi pi-plus"
-          styleClass="p-button-rounded p-button-outlined"
-          (onClick)="addItem(item)">
-        </p-button>
-      </div>
-    </p-card>
+  <!-- Subtitle strip -->
+  <div style="background:var(--surface); border-bottom:1px solid var(--border);">
+    <div style="max-width:960px; margin:0 auto; padding:0.7rem 1rem;
+                display:flex; align-items:center; gap:0.75rem;">
+      <span style="font-size:0.8rem; color:var(--text-secondary); display:flex; align-items:center; gap:0.3rem;">
+        <i class="bi bi-utensils" style="color:var(--accent-dark);"></i> {{ restaurant.cuisine }}
+      </span>
+      <span style="color:var(--border);">|</span>
+      <span style="font-size:0.8rem; color:var(--warning); font-weight:700; display:flex; align-items:center; gap:0.3rem;">
+        <i class="bi bi-star-fill"></i> {{ restaurant.rating }}
+      </span>
+    </div>
   </div>
 
+  <!-- Section header -->
+  <div class="section-header">
+    <h2>Cardápio</h2>
+    <span style="font-size:0.78rem; color:var(--text-muted);">{{ restaurant.items.length }} itens</span>
+  </div>
+
+  <div class="menu-list" style="padding-bottom:7rem;">
+    <div class="menu-item-card" *ngFor="let item of restaurant.items">
+      <div class="mic-icon">
+        <i [class]="'bi ' + item.icon"></i>
+      </div>
+
+      <div class="mic-info">
+        <div class="mic-name">{{ item.name }}</div>
+        <div class="mic-desc">{{ item.desc }}</div>
+      </div>
+
+      <div class="mic-right">
+        <span class="mic-price">R$&nbsp;{{ item.price | number:'1.2-2' }}</span>
+        <button class="mic-add" (click)="addItem(item)" title="Adicionar ao carrinho">
+          <i class="bi bi-plus-lg"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating cart button -->
   <div class="cart-float" *ngIf="cart.itemCount() > 0">
     <p-button
-      [label]="'Carrinho (' + cart.itemCount() + ')  •  R$ ' + (cart.total() | number:'1.2-2')"
       icon="pi pi-shopping-cart"
-      styleClass="p-button-success p-button-raised"
-      routerLink="/cart"
-      [style]="{'border-radius':'999px', 'padding':'0.75rem 1.5rem'}">
+      [label]="cart.itemCount() + (cart.itemCount() === 1 ? ' item' : ' itens') + '  •  R$ ' + (cart.total() | number:'1.2-2')"
+      routerLink="/cart">
     </p-button>
   </div>
 </div>
